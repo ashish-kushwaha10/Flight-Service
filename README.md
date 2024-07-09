@@ -34,10 +34,6 @@ Lets take a look inside the `src` folder
     ```
         PORT=3000
     ```
-- To run the server execute
- ```
- npm run dev
- ```
  - go inside the `src` folder and execute the following command:
     ```
       npx sequelize init
@@ -46,29 +42,58 @@ Lets take a look inside the `src` folder
  - If you're setting up your development environment, then write the username of your db, password of your db and in dialect mention whatever db you are using for ex: mysql, mariadb etc
  - If you're setting up test or prod environment, make sure you also replace the host with the hosted db url.
 
-- add yor DB name and mySQL password in the config/config.json file
+ - To run the server execute
+ ```
+ npm run dev
+ ```
 
- - then if you want to creat mysql database then run below command
+
+
+ # Welcome to Flights Service
+
+## Project Setup
+- clone the project on your local
+- Execute `npm install` on the same path as of your root directory of teh downloaded project
+- Create a `.env` file in the root directory and add the following environment variable
+    - `PORT=3000`
+- Inside the `src/config` folder create a new file `config.json` and then add the following piece of json
+
 ```
-npx sequelize db:create
+{
+  "development": {
+    "username": <YOUR_DB_LOGIN_NAME>,
+    "password": <YOUR_DB_PASSWORD>,
+    "database": "Flights_Search_DB_DEV",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  }
+}
+
+```
+- Once you've added your db config as listed above, go to the src folder from your terminal and execute `npx sequelize db:create`
+and then execute
+
+`npx sequelize db:migrate`
 ```
 
-- `creating a model & migration` -> run below command to create the database model(schema) and migration(version) of DB.
-```
-npx sequelize model:generate --name Airplane --attributes modelNumber:string,capacity:integer
-```
-- Remember above command will NOT create the table right now. this will creat only model with named as "airplane" and migration file. it is just like adding a git file but Not commiting.
-- Whatever constraints we put in "model" folder, that will be JS level constraints only, not the DB constraints
-- the contraints in the "migration" folder will be the actual DB constraints.
 
--`migration i.e. version of DB` -> this can create , alter and remove the data(tables) from DB.
+## DB Design
+  - Airplane Table
+  - Flight
+  - Airport
+  - City 
 
--`creating table on databases i.e. commiting the migration` -> run below command to create a commit of a migration means this will actually create the table in mySQL DB.
-```
-npx sequelize db:migrate
-```
+  - A flight belongs to an airplane but one airplane can be used in multiple flights
+  - A city has many airports but one airport belongs to a city
+  - One airport can have many flights, but a flight belongs to one airport
 
--`to revert the DB change i.e. undo the last migration` -> run below command to delete the tables from the DB
+
+  
+## Tables
+
+### City -> id, name, created_at, updated_at
+### Airport -> id, name, address, city_id, created_at, updated_at
+    Relationship -> City has many airports and Airport belongs to a city (one to many)
 ```
-npx sequelize db:migrate:undo
+npx sequelize model:generate --name Airport --attributes name:String,address:String,cityId:integer
 ```

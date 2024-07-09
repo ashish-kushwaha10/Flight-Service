@@ -1,15 +1,24 @@
-const { Logger } = require('../config');
+const { where } = require("sequelize");
+const { Logger } = require("../config")
 
 class CrudRepository {
     constructor(model) {
-        this.model = model;
+        this.model = model
     }
 
+    // create method
     async create(data) {
-        const response = await this.model.create(data);
-        return response;
+        try {
+            const response = await this.model.create(data);
+            return response;
+
+        } catch (error) {
+            Logger.info("something went wrong in the crud repo: create method");
+            throw error;
+        }
     }
 
+    // delete method
     async destroy(data) {
         try {
             const response = await this.model.destroy({
@@ -18,8 +27,9 @@ class CrudRepository {
                 }
             });
             return response;
-        } catch(error) {
-            Logger.error('Something went wrong in the Crud Repo : destroy');
+
+        } catch (error) {
+            Logger.info("something went wrong in the crud repo: destroy method");
             throw error;
         }
     }
@@ -28,35 +38,36 @@ class CrudRepository {
         try {
             const response = await this.model.findByPk(data);
             return response;
-        } catch(error) {
-            Logger.error('Something went wrong in the Crud Repo : get');
+        } catch (error) {
+            Logger.info("something went wrong in the crud repo: get method");
             throw error;
         }
     }
 
-    async getAll() {
+    async getAll(){ // gives you array of all the records
         try {
-            const response = await this.model.findAll();
+            const response = await this.model.findByPk();
             return response;
-        } catch(error) {
-            Logger.error('Something went wrong in the Crud Repo : get');
+        } catch (error) {
+            Logger.info("something went wrong in the crud repo: getAll method");
             throw error;
         }
     }
 
-    async update(id, data) { // data -> {col: value, ....}
+    async update(id,data) { // data --> {column: value .....}
         try {
             const response = await this.model.update(data, {
-                where: {
-                    id: id
+                where:{
+                    id:id
                 }
-            })
+            });
             return response;
-        } catch(error) {
-            Logger.error('Something went wrong in the Crud Repo : get');
+        } catch (error) {
+            Logger.info("something went wrong in the crud repo: update method");
             throw error;
         }
     }
+
 }
 
 module.exports = CrudRepository;
