@@ -1,7 +1,7 @@
 {
   "name": "fligh_service",
   "version": "1.0.0",
-  "description": "A basic started boilerplate project for node",
+  "description": "flight service",
   "main": "index.js",
   "scripts": {
     "dev": "npx nodemon src/index.js"
